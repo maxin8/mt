@@ -17,6 +17,7 @@
 - **即时互译**（原"文字互译"）新增快捷键：Ctrl+C 智能复制全文（有选中文字时优先复制选中）、Alt+D 一键清空输入和结果
 - 修复即时互译回车换行问题（之前回车会误触发翻译）
 - 复制按钮状态优化：复制后显示"已复制"，输入新内容或清空后自动恢复
+- **修复升级后激活状态丢失问题**：`config.json` 从 exe 同目录改存到 `%APPDATA%\MT字幕翻译官\`，无论 exe 放在哪里都能找到同一份配置；首次运行新版时自动迁移旧配置
 - 落地页 moxidao.com/mt 同步更新，下载链接改为 GitHub Releases 页面并加下载说明
 
 ### v1.0.1（2026-06-06）
@@ -166,7 +167,32 @@ r2 = requests.put(f"https://api.github.com/repos/{REPO}/contents/README.md", hea
 print("Status:", r2.status_code)
 ```
 
-### 5.3 完整发版步骤
+### 5.3 覆盖更新已有 Release 的 exe（不改版本号）
+
+如果只是修了个 bug 想覆盖同版本 exe，不需要创建新 Release：
+
+```python
+import requests
+
+TOKEN   = "ghp_xxxxxxxx（见本地交接文档）"
+REPO    = "maxin8/mt"
+TAG     = "v1.0.2"   # ← 要覆盖的版本
+EXE     = r"dist\MT字幕翻译官.exe"
+HEADERS = {"Authorization": f"Bearer {TOKEN}", "Accept": "application/vnd.github+json"}
+
+# 获取 release，删除旧 asset，上传新 exe
+r = requests.get(f"https://api.github.com/repos/{REPO}/releases/tags/{TAG}", headers=HEADERS)
+release = r.json()
+upload_base = release["upload_url"].split("{")[0]
+for asset in release.get("assets", []):
+    requests.delete(f"https://api.github.com/repos/{REPO}/releases/assets/{asset['id']}", headers=HEADERS)
+with open(EXE, "rb") as f:
+    r2 = requests.post(f"{upload_base}?name=mt.exe",
+        headers={**HEADERS, "Content-Type": "application/octet-stream"}, data=f.read())
+print(r2.json().get("browser_download_url"))
+```
+
+### 5.4 完整发版步骤（新版本号）
 
 每次发新版本，按顺序执行：
 
@@ -421,7 +447,7 @@ struct LicenseManager {
 | 文件 | 路径 |
 |------|------|
 | 主程序 | `C:\Users\梁AI\Desktop\srt_translator\translator.py` |
-| 配置文件 | `C:\Users\梁AI\Desktop\srt_translator\config.json` |
+| 配置文件（运行时） | `C:\Users\梁AI\AppData\Roaming\MT字幕翻译官\config.json`（激活状态、API Key 等） |
 | 打包输出 | `C:\Users\梁AI\Desktop\srt_translator\dist\MT字幕翻译官.exe` |
 | 打包配置 | `C:\Users\梁AI\Desktop\srt_translator\MT字幕翻译官.spec` |
 | 服务端脚本 | `C:\Users\梁AI\Desktop\cardserver\` |
