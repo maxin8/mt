@@ -36,9 +36,13 @@ SRT 翻译完成后自动生成凝练版标题、标题党标题和内容摘要�
 *After SRT translation, automatically generates a concise title, a click-bait title, and a content summary — pre-filled into the Title Translation box. Adjustable style and summary length.*
 
 ### 多平台 API 支持 / Multi-Platform API Support
-支持 DeepSeek、阿里云通义千问、OpenAI GPT、Claude（Anthropic）、Google Gemini 五大翻译引擎。点击任意平台行即切换，高级设置可为每个平台单独配置中转代理地址。
+支持 **豆包火山方舟**、DeepSeek、阿里云通义千问、OpenAI GPT、Claude（Anthropic）、Google Gemini 六大翻译引擎。点击任意平台行即切换，高级设置可为每个平台单独配置中转代理地址。
 
-*Supports DeepSeek, Alibaba Qwen, OpenAI GPT, Claude (Anthropic), and Google Gemini. Click any platform row to switch instantly. Advanced settings allow per-platform proxy/relay URL.*
+其中**豆包火山方舟**使用 `doubao-seed-translation` 专用翻译模型：无需提示词，直接指定语种，成本更低。注意：该模型暂不支持蒙古语、印地语，泰语偶有漏翻，也不支持 AI 封面和智能标题生成——这些场景请使用 DeepSeek 等通用平台。
+
+*Supports Doubao (Volcengine Ark), DeepSeek, Alibaba Qwen, OpenAI GPT, Claude (Anthropic), and Google Gemini. Click any platform row to switch instantly. Advanced settings allow per-platform proxy/relay URL.*
+
+*Doubao uses the dedicated `doubao-seed-translation` model: no prompt needed, language pair passed directly, lower cost. Note: it does not support Mongolian or Hindi, Thai output is occasionally left untranslated, and it cannot generate AI covers or smart titles — use DeepSeek or another general platform for those.*
 
 ### 界面多语言 / Multilingual UI
 软件界面支持 **简体中文 / 繁体中文 / English / Español / Français** 五种语言切换，点击右上角按钮即时切换，所有提示和报错信息随界面语言同步变化。
@@ -49,7 +53,7 @@ SRT 翻译完成后自动生成凝练版标题、标题党标题和内容摘要�
 - 免费版 / Free：简体中文、繁体中文、英语 / Simplified Chinese, Traditional Chinese, English
 - 满血版 / Full：全部 20 种语言 / All 20 languages
 - 一机一码，重装免费重激活 / One license per device, free re-activation after reinstall
-- 有效期 1 年，续费从到期日顺延 / 1-year validity, renewal extends from expiry date
+- 一次付费（¥599），终身使用，无需续费 / One-time payment (¥599), lifetime license, no renewal
 
 ---
 
@@ -105,12 +109,40 @@ Windows 11 会对未经微软代码签名的独立开发者软件进行拦截，
 2. 付款后系统自动通过爱发电私信发送激活码 / Code sent automatically via 爱发电 message after payment
 3. 软件 → **激活** 标签页 → 输入激活码 → 立即激活 / Go to **Activate** tab → enter code → Activate
 
-续费时输入新激活码，有效期自动从原到期日顺延 1 年。
-*For renewal: enter the new code and the license extends 1 year from the original expiry date.*
+满血版为终身授权，一次付费永久使用；已购买用户自动享受终身授权，无需任何操作。
+*The Full Version is a lifetime license — pay once, use forever. Existing customers are automatically upgraded, no action needed.*
 
 ---
 
 ## 更新日志 / Changelog
+
+### v1.5.0
+- **新增豆包火山方舟平台**：使用 `doubao-seed-translation` 专用翻译模型，无需提示词、直接指定语种，成本更低；在 API 设置页排在最前面
+- 网络波动、服务限流时自动重试；模型偶尔漏翻（原样返回原文）时自动检测并重译
+- 使用说明：不支持蒙古语、印地语；泰语偶有漏翻；不支持 AI 封面与智能标题生成
+- **修复**：在 API 设置页点击尚未填写 Key 的平台时，反复弹出「请先配置API」提示的问题
+
+*New in v1.5.0:*
+- *Added Doubao (Volcengine Ark) with the dedicated `doubao-seed-translation` model — no prompt, language pair passed directly, lower cost; listed first in API Settings*
+- *Automatic retry on network hiccups and rate limits; detects and re-translates lines the model returns untranslated*
+- *Notes: Mongolian and Hindi unsupported; Thai occasionally untranslated; no AI cover / smart title generation*
+- *Fix: repeated "Please configure API" popup when selecting a platform with no API Key*
+
+### v1.4.0
+- **收费模式改为终身买断**：满血版由「¥599/年」改为「¥599 终身」，激活后永久有效；已购买用户自动享受终身授权
+
+*New in v1.4.0: Switched to a one-time lifetime license (¥599). Existing paying users are upgraded automatically.*
+
+### v1.3.0
+- **封面生成页大改版**：新增独立「封面文字」输入框和「封面语言」多选框；生成时按所选语言自动翻译封面文字；文件名加入批次编号，不再覆盖旧封面
+- **修复**：封面生成页内容显示不全，现支持滚轮/滚动条滚动
+
+*New in v1.3.0: Cover Generation overhaul (standalone cover text, cover-language multi-select, auto-translation, batch-numbered filenames) and a scrolling fix.*
+
+### v1.2.0
+- **简繁中文本地极速转换**：简体 ↔ 繁体互译改用本地转换引擎，不调用在线 API，更快、无需联网、无需 API Key，结果更准确
+
+*New in v1.2.0: Simplified ↔ Traditional Chinese conversion now runs locally — faster, offline, no API Key needed.*
 
 ### v1.1.0
 - **新增界面语言**：新增西班牙语（ES）和法语（FR），现支持 5 种界面语言（简中/繁中/英/西班牙/法语）
